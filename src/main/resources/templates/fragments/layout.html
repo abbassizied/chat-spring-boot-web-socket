@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Default Title</title>
+<!-- Add your CSS or JS files here if necessary -->
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+<!-- Custom JS -->
+<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+</head>
+<body>
+	<!-- Header Section -->
+	<header th:replace="~{fragments/header :: header}"></header>
+
+	<main>
+		<!-- This is where content from child templates will be inserted -->
+		<div layout:fragment="content"></div>
+	</main>
+
+	<!-- Footer Section -->
+	<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

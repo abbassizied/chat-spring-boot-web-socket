@@ -1,0 +1,10 @@
+        #chat {
+            margin: 20px;
+        }
+        #broadcast-messages, #private-messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }

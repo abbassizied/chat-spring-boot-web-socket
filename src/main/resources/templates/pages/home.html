@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<title>Home Page</title>
+</head>
+<body>
+	<section layout:fragment="content">
+		<!-- Display the message from the model -->
+		<h1 th:text="${message}"></h1>
+
+			<div sec:authorize='hasAuthority("ROLE_SUPERADMIN")'>This content is only shown to <b>super-admins</b>.</div>
+		
+			<div sec:authorize='hasAuthority("ROLE_ADMIN")'>This content is only shown to <b>admins</b>.</div>
+
+			<div sec:authorize='hasAuthority("ROLE_USER")'>This content is only shown to <b>USERS</b>.</div>
+		
+		
+		 
+		<h3 th:inline="text">Welcome <span sec:authentication="principal.username"></span></h3>  
+		
+		<h3>Welcome <span th:text="${firstName}"></span> <span th:text="${lastName}"></span></h3>
+		
+		<h3>Your Authorities:</h3>
+			<ul>
+        		<li th:each="authority : ${authorities}" th:text="${authority}"></li>
+			</ul>
+			
+		<h1>OR</h1>	
+	 
+		<p>
+			Logged user: <span sec:authentication="name">Bob</span>
+		</p>
+		<p>
+			Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+		</p>
+		
+	
+	</section>
+</body>
+</html>

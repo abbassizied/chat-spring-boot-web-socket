@@ -9,8 +9,27 @@
 
 
 	<header th:fragment="header">
-		<a th:href="@{/}">Home</a> |
-		<a th:href="@{/chat}">Chat</a> 
+
+        <!-- Left side -->
+        <div>
+			<a th:href="@{/}">Home</a>  |
+			<a th:href="@{/users/}">Users</a> |
+			<a th:href="@{/roles/}">Roles</a> | 
+			<a th:href="@{/scoreboard/}">Simple Websocket</a> | 
+			<a th:href="@{/public-chat}">Chat</a> 
+        </div>
+
+        <!-- Right side of the navbar -->
+        <div sec:authorize="isAuthenticated()">
+        	<a th:href="@{/profile}">Profile</a> | 
+        	<a href="/logout">Logout</a>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+        	<a th:href="@{/register}">Register</a> 
+        </div> 
+
+
+
 	</header>
 
 </body>

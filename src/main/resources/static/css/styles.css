@@ -1,10 +1,22 @@
-        #chat {
-            margin: 20px;
-        }
-        #broadcast-messages, #private-messages {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
+main {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f0;
+    margin: 10px;
+	padding: 20px;
+}
+
+header {
+	display: flex; 
+	justify-content: space-between;
+    background-color: #f0f0f0;
+	margin: 10px;
+	padding: 20px; 
+}
+
+footer { 
+	text-align: center; /* Center content horizontally */
+    background-color: #f0f0f0;
+	margin: 10px;
+	padding: 10px; 
+}
+

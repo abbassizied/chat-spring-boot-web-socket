@@ -2,77 +2,60 @@ package com.sip.ams.controllers;
 
 import com.sip.ams.entities.Message;
 import com.sip.ams.entities.User;
-import com.sip.ams.repositories.MessageRepository;
-import com.sip.ams.repositories.UserRepository;
+import com.sip.ams.services.MessageService;
+import com.sip.ams.services.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.messaging.handler.annotation.SendTo; 
+import org.springframework.stereotype.Controller; 
 
-import java.util.Optional;
+import java.security.Principal; 
 
 @Controller
 public class ChatController {
 
-    @Autowired
-    private MessageRepository messageRepository;
+	private final MessageService messageService;
+	private final UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    public ChatController(MessageService messageService, UserService userService) {
+		this.messageService = messageService;
+		this.userService = userService;
+	}
 
-    @GetMapping("/")
-    public String homePage(Model model) {
-        model.addAttribute("message", "Welcome to the Chatroom!");
-        return "pages/index"; // Loads the main chat page
-    }
-
-    /**
+	/**
      * Handles broadcast messages sent to all users.
      */
+
     @MessageMapping("/chat.broadcast")
     @SendTo("/topic/broadcast")
-    public Message broadcastMessage(Message message) {
-        User sender = getOrCreateUser(message.getFromUser().getUsername());
+    public Message broadcastMessage(Message message, Principal principal) {
+
+		User sender = userService.findByEmail(principal.getName());
         
         // Create and save a broadcast message
-        Message savedMessage = new Message(sender, message.getText());
-        messageRepository.save(savedMessage);
+		Message newMessage = new Message(sender, message.getMessageContent()); 
+        messageService.saveMessage(newMessage);
         
-        return new Message(sender, message.getText());
+        return newMessage;
     }
 
+ 
     /**
      * Handles private messages sent directly to a specific user.
      */
     @MessageMapping("/chat.private")
-    @SendTo("/topic/private")
-    public Message privateMessage(Message message) {
-        User sender = getOrCreateUser(message.getFromUser().getUsername());
-        User recipient = getOrCreateUser(message.getToUser().getUsername());
+    @SendTo("/topic/private/{receiverId}")
+    public Message privateMessage(Message message, Principal principal, @DestinationVariable Integer receiverId) {
+        User sender = userService.findByEmail(principal.getName()); // Get the sender
+        User receiver = userService.getUserById(receiverId); // Get the receiver by ID
 
-        // Create and save a private message
-        Message savedMessage = new Message(sender, message.getText(), recipient);
-        messageRepository.save(savedMessage);
+        // Create and save the private message
+        Message newMessage = new Message(sender, message.getMessageContent(), receiver);
+        messageService.saveMessage(newMessage);
         
-        return new Message(sender, message.getText(), recipient);
+        return newMessage; // Return the new message to be sent to the receiver
     }
-
-    /**
-     * Retrieves an existing user by username or creates a new user if none exists.
-     */
-    private User getOrCreateUser(String username) {
-        if (username == null || username.isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be null or empty");
-        }
-        
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        return userOpt.orElseGet(() -> {
-            User newUser = new User(username);
-            userRepository.save(newUser);
-            return newUser;
-        });
-    }
+	    
+    
 }

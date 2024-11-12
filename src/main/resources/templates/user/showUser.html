@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout.html}">
+<head>
+<title>User Details</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+
+<h1>User Details</h1>
+
+
+    <p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+    <p><strong>First Name:</strong> <span th:text="${user.firstName}"></span></p>
+    <p><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    <p><strong>Active:</strong> <span th:text="${user.active ? 'true' : 'false'}"></span></p>
+
+    <!-- 
+        Inside the single loop, after displaying the role name with th:text, it checks if the current role is not the last one (!iterStat.last). If it's not the last, a comma is displayed.
+    -->
+
+    <p><strong>Roles:</strong> 
+        <span th:each="role, iterStat : ${user.roles}">
+            <span th:text="${role.name}"></span>
+            <span th:if="${!iterStat.last}">, </span>
+        </span>
+    </p>
+
+
+
+<br/>
+<a href="/users/list">Back to list</a> 
+
+</section>
+
+
+</body>
+</html>

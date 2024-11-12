@@ -1,69 +1,109 @@
 package com.sip.ams.entities;
 
-import jakarta.persistence.*; 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import jakarta.persistence.*;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+import com.sip.ams.enums.MessageType;
 
 @Entity
 public class Message {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String text;
-    private String timestamp;
+	@Column(name = "message_content")
+	private String messageContent;
+	private ZonedDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "message_type")	
+	private MessageType messageType;
 
-    @ManyToOne
-    @JoinColumn(name = "to_user_id", nullable = true) // Nullable for broadcast messages
-    private User toUser;
+	@ManyToOne
+	@JoinColumn(name = "from_user_id")
+	private User sender;
 
-    public Message() {
-        // Default constructor
-    }
+	@ManyToOne
+	@JoinColumn(name = "to_user_id", nullable = true) // Nullable for broadcast or public messages
+	private User receiver;
 
-    // Constructor for creating broadcast messages
-    public Message(User fromUser, String text) {
-        this.fromUser = fromUser;
-        this.text = text;
-        this.timestamp = getCurrentTimestamp();
-    }
+	// Default constructor
+	public Message() {
+		// No-arg constructor
+	}
 
-    // Constructor for creating private messages
-    public Message(User fromUser, String text, User toUser) {
-        this.fromUser = fromUser;
-        this.text = text;
-        this.toUser = toUser;
-        this.timestamp = getCurrentTimestamp();
-    }
+	// Constructor for broadcast (public) messages
+	public Message(User sender, String messageContent) {
+		this.sender = sender;
+		this.messageContent = messageContent;
+		this.createdAt = ZonedDateTime.now();
+		this.messageType = MessageType.PUBLIC_CHAT;
+	}
 
-    // Getters for each field
-    public Long getId() {
-        return id;
-    }
+	// Constructor for private messages
+	public Message(User sender, String messageContent, User receiver) {
+		this.sender = sender;
+		this.messageContent = messageContent;
+		this.receiver = receiver;
+		this.createdAt = ZonedDateTime.now();
+		this.messageType = MessageType.PRIVATE_CHAT;
+	}
 
-    public String getText() {
-        return text;
-    }
+	// Getters and Setters
+	public Long getId() {
+		return id;
+	}
 
-    public String getTimestamp() {
-        return timestamp;
-    }
+	public String getMessageContent() {
+		return messageContent;
+	}
 
-    public User getFromUser() {
-        return fromUser;
-    }
+	public void setMessageContent(String messageContent) {
+		this.messageContent = messageContent;
+	}
 
-    public User getToUser() {
-        return toUser;
-    }
+	public ZonedDateTime getCreatedAt() {
+		return createdAt;
+	}
 
-    // Helper method to generate a timestamp
-    private String getCurrentTimestamp() {
-        return new SimpleDateFormat("HH:mm").format(new Date());
-    }
+	public User getSender() {
+		return sender;
+	}
+
+	public void setSender(User sender) {
+		this.sender = sender;
+	}
+
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}
+
+	public User getReceiver() {
+		return receiver;
+	}
+
+	public MessageType getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(MessageType messageType) {
+		this.messageType = messageType;
+	}
+
+	// Format createdAt to user’s local time zone
+	public String getFormattedTimestamp(String userTimeZone) {
+		return createdAt.withZoneSameInstant(java.time.ZoneId.of(userTimeZone))
+				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
+	}
+
+	// toString for easier logging/debugging
+	@Override
+	public String toString() {
+		return "ChatMessage{" + "id=" + id + ", messageContent='" + messageContent + '\'' + ", createdAt=" + createdAt
+				+ ", sender=" + (sender != null ? sender.getEmail() : "null") + ", receiver="
+				+ (receiver != null ? receiver.getEmail() : "null") + ", messageType=" + messageType + '}';
+	}
+
 }

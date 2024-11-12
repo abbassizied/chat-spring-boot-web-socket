@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout.html}">
+<head>
+    <title>User Registration</title>
+</head>
+<body>
+    <section layout:fragment="content">
+        <h1>User Registration</h1>
+        
+		<div th:if="${successRegister}">
+		    <span style="color:green" th:text="${successRegister}"></span>
+		</div>
+
+
+        <form action="#" th:action="@{/register}" th:object="${user}" method="POST">
+            <div>
+                <label for="firstName">First Name: </label>
+                <input type="text" th:field="*{firstName}" required />
+                <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color:red;"></span>
+                <br/>
+            </div>
+
+            <div>
+                <label for="lastName">Last Name: </label>
+                <input type="text" th:field="*{lastName}" required />
+                <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></span>
+                <br/>
+            </div>
+
+            <div>
+                <label for="email">Email: </label>
+                <input type="email" th:field="*{email}" required />
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:red;"></span>
+                <br/>
+            </div>
+
+            <div>
+                <label for="password">Password: </label>
+                <input type="password" th:field="*{password}" required />
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red;"></span>
+                <br/>
+            </div>
+
+            <input type="submit" value="Register" />
+        </form>
+
+        <p>Already have Account? <a th:href="@{/login}">Go to the Login Page</a>.</p>
+    </section>
+</body>
+</html>

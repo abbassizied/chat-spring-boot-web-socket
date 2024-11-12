@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+
+<head>
+	<title>Chat WebSocket</title> 
+	<link rel="stylesheet" th:href="@{/css/private-chat.css}" />	  
+	<script type="text/javascript" th:src="@{/js/private-chat.js}"></script>
+    <!-- WebSocket related dependencies -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> 
+</head>
+
+<body>
+	<section layout:fragment="content">
+
+
+		<h2>Private Chat | WebSocket Chat Application</h2>
+  
+  
+		<div id="private-messages"></div>
+		    
+		    
+		<input type="text" id="private-message" placeholder="Type a private message...">
+		<button onclick="sendPrivateMessage()">Send</button> 
+
+
+
+
+
+	</section>
+</body>
+
+</html>

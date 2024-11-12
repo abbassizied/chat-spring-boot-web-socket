@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout.html}">
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <section layout:fragment="content">
+        <h1>Login</h1>
+
+        <div th:if="${param.error}">
+            <p style="color:red">Invalid username or password.</p>
+        </div>
+        <div th:if="${param.logout}">
+            <p style="color:green">You have been logged out successfully.</p>
+        </div>
+
+        <!-- Login Form -->
+        <form action="login" method="POST">
+            <!-- Email Input -->
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="username" placeholder="Enter your email" required />
+            </div>
+
+            <!-- Password Input -->
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required />
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <input name="submit" type="submit" value="Login" />
+            </div>
+        </form>
+
+        <!-- Optional link to registration or password reset -->
+        <p>Don't have an account? <a th:href="@{/register}">Register here</a>.</p>
+        <p>Forgot your password? <a th:href="@{/forgot-password}">Reset it here</a>.</p>
+        <p>If you have any issues, <a th:href="@{/contact}">Contact us</a>.</p>
+    </section>
+</body>
+</html>

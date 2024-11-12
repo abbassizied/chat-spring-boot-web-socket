@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<title>Profile Page</title>
+</head>
+<body>
+	<section layout:fragment="content">
+		<!-- Display the message from the model -->
+		<h1>Profile</h1>
+		
+		<p><a th:href="@{/update-password}">Change Your Password</a></p> 
+		 
+		<h3>Your Infos:</h3>
+		<p><strong>First Name:</strong> <span th:text="${currentUser.getFirstName()}"></span></p>
+		<p><strong>Last Name:</strong> <span th:text="${currentUser.getLastName()}"></span></p>
+		<p><strong>Email:</strong> <span th:text="${currentUser.getUsername()}"></span></p>
+		<p><strong>Active:</strong> <span th:text="${currentUser.isEnabled() ? 'true' : 'false'}"></span></p>
+ 
+	    <p><strong>is Account Non Expired:</strong> <span th:text="${currentUser.isAccountNonExpired()}"></span></p>   
+	    <p><strong>is Account Non Locked:</strong> <span th:text="${currentUser.isAccountNonLocked()}"></span></p>
+	    <p><strong>is Credentials Non Expired:</strong> <span th:text="${currentUser.isCredentialsNonExpired()}"></span></p> 	
+	
+	
+		<h3>Your Authorities:</h3>
+			<ul>
+        		<li th:each="authority : ${currentUser.getAuthorities()}" th:text="${authority}"></li>
+			</ul>		
+		
+		
+	</section>
+</body>
+</html>

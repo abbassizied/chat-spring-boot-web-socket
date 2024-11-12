@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout.html}">
+<head>
+<title>Roles List</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <h1>Role List</h1>
+
+
+<p><a th:href="@{'/roles/add'}">Add a new role</a></p>
+
+<div th:switch="${roles}">
+    <h2 th:case="null">No roles yet!</h2>
+    <div th:case="*">
+        <h2>Roles</h2>
+        <table border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th> 
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="role : ${roles}">
+                    <td th:text="${role.id}"></td>
+                    <td th:text="${role.name}"></td> 
+                    <td><a th:href="@{/roles/edit/{id}(id=${role.id})}">Edit</a></td>
+                    <td><a th:href="@{/roles/delete/{id}(id=${role.id})}">Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</section>
+
+</body>
+</html>

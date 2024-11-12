@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout.html}">
+<head>
+<title>Add User</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+
+    <h1>Add New User</h1>
+    
+<div th:switch="${nbreRoles}">
+
+    <h2 th:case="0">
+        No role has been added yet! You should add at least one role.
+    </h2>
+
+    <div th:case="*">
+
+        <form action="#" th:action="@{/users/add}" th:object="${user}" method="POST">
+            
+                <div>
+                    <label for="firstName">First Name (required):</label>
+                    <input type="text" th:field="*{firstName}" required />
+                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color:red;"></span>
+                    <br/>
+                </div>
+
+                <div>
+                    <label for="lastName">Last Name (required):</label>
+                    <input type="text" th:field="*{lastName}" required />
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color:red;"></span>
+                    <br/>
+                </div>
+
+                <div>
+                    <label for="email">Email (required):</label>
+                    <input type="email" th:field="*{email}" required />
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:red;"></span>
+                    <br/>
+                </div>
+
+                <div>
+                    <label for="password">Password (min 8 chars):</label>
+                    <input type="password" th:field="*{password}" required />
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red;"></span>
+                    <br/>
+                </div>
+
+                <div>
+                    <label for="active">Active:</label>                 
+                    <input type="checkbox" th:field="*{active}" />
+                    <br/>
+                </div>
+
+                <div>
+                    <label for="roles">Roles (required, select multiple):</label>
+                    <br/>
+                    <select th:field="*{roles}" multiple required>
+                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" style="color:red;"></span>
+                    <br/>
+                </div>
+
+            <input type="submit" value="Save" />
+        </form>
+
+    </div>      
+
+</div>
+
+
+<br/>
+<a href="/users/list">Back to list</a> 
+
+</section>
+
+
+</body>
+</html>

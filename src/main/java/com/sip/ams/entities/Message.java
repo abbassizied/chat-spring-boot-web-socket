@@ -29,6 +29,12 @@ public class Message {
 	@JoinColumn(name = "to_user_id", nullable = true) // Nullable for broadcast or public messages
 	private User receiver;
 
+    // Method to return the sender's full name (you can adjust the name format if needed)
+    public String getSenderName() {
+        return sender != null ? sender.getFirstName() + " " + sender.getLastName() : "Unknown Sender";
+    }	
+	
+	
 	// Default constructor
 	public Message() {
 		// No-arg constructor

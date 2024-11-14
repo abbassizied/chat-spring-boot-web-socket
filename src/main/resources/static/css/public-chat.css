@@ -1,0 +1,26 @@
+/* Style for messages on the left (default) */
+.message-left {
+    text-align: left;
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+}
+
+/* Style for messages on the right (for the authenticated user) */
+.message-right {
+    text-align: right;
+    background-color: #cce5ff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+    margin-left: auto;
+}
+
+/* Additional optional styling */
+#conversation {
+    display: flex;
+    flex-direction: column;
+}

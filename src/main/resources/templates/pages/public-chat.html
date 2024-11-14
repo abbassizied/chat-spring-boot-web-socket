@@ -4,11 +4,14 @@
 
 <head>
 	<title>Chat WebSocket</title> 
+	
+    <!-- WebSocket related dependencies -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> 
+	
+    <!-- public-chat --> 
 	<link rel="stylesheet" th:href="@{/css/public-chat.css}" />	  
 	<script type="text/javascript" th:src="@{/js/public-chat.js}"></script>
-    <!-- WebSocket related dependencies -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> 
 </head>
 
 <body>
@@ -20,15 +23,13 @@
 	        <!-- Left Side: User List -->
 	        <div class="user-list">
 	            <h2>Users</h2>
-					<ul>
-					    <!-- Iterate over the users passed from the controller -->
-					    <th:block th:each="user : ${users}">
-					        <li> 
-					            <!-- Use th:href to handle the onclick dynamically, passing the user ID -->
-					            <a  th:href="@{/private-chat/{id}(id=${user.id})}" th:text="${user.firstName} + ' ' + ${user.lastName}"></a>
-					        </li>
-					    </th:block>
-					</ul>
+				<ul>
+			    	<!-- Iterate over the users passed from the controller -->
+					<li th:each="user : ${users}"> 
+						<!-- Use th:href to handle the onclick dynamically, passing the user ID -->
+						<a th:href="@{/private-chat/{id}(id=${user.id})}" th:text="${user.firstName} + ' ' + ${user.lastName}"></a>
+					</li>
+				</ul>
 	
 	        </div> 
 	        
@@ -36,18 +37,25 @@
 	        <!-- Right Side: Public Chat Room -->
 	        <div class="public-chat">
 	            <h2>Public Chat</h2>
-	            <div class="public-chat-messages" id="public-chat-messages">
-	                <!-- Public messages go here -->
-	            </div>
-	            <div class="chat-input">
-	                <input type="text" id="public-message-input" placeholder="Broadcast to all users...">
-	                <button onclick="sendPublicMessage()">Send</button>
-	            </div>
+	            <!-- div with messages -->
+				<div style="background-color: white; padding:10px; width: 100%; height: 300px; border: 1px solid black; overflow-y: auto;" id="conversation">
+				    <th:block th:each="message : ${messages}">
+				        <!-- Check if the message sender is the current authenticated user -->
+				        <div th:classappend="${message.senderName == currentUser.firstName + ' ' + currentUser.lastName} ? 'message-right' : 'message-left'">
+				            <p><strong th:text="${message.senderName}"></strong>: <span th:text="${message.messageContent}"></span></p>
+				        </div>
+				    </th:block>
+				    <!-- Public messages go here -->
+				</div>
+
+				<!-- message form -->
+				<form> 
+					<input type="text" id="message" name="message" size="80" maxlength="256" placeholder="Chat with us!" >
+					<button type="button" onclick="sendPublicMessage()">Send</button>
+				</form>
 	        </div>  
 
 
-
- 
 
 
 

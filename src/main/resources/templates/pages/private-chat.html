@@ -4,11 +4,12 @@
 
 <head>
 	<title>Chat WebSocket</title> 
+    <!-- WebSocket related dependencies -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> 
+    <!-- private chat --> 
 	<link rel="stylesheet" th:href="@{/css/private-chat.css}" />	  
 	<script type="text/javascript" th:src="@{/js/private-chat.js}"></script>
-    <!-- WebSocket related dependencies -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> 
 </head>
 
 <body>
@@ -18,11 +19,20 @@
 		<h2>Private Chat | WebSocket Chat Application</h2>
   
   
-		<div id="private-messages"></div>
+	    <div id="conversation" style="background-color: white; height: 300px; padding:10px; overflow-y: auto;">
+	        <!-- Messages will be appended here -->
+	        <p th:each="message : ${messages}">
+	            <span th:text="${message.sender.firstName} + ': ' + ${message.messageContent}"></span>
+	        </p>
+	    </div>
 		    
 		    
-		<input type="text" id="private-message" placeholder="Type a private message...">
-		<button onclick="sendPrivateMessage()">Send</button> 
+	    <form>
+        	<!-- Hidden fields to store receiver information --> 
+        	<input type="hidden" id="receiverId" th:value="${receiver.id}" /> 
+	        <input type="text" id="messageContent" placeholder="Type your message">
+	        <button type="button" onclick="sendPrivateMessage()">Send</button>
+	    </form>
 
 
 
